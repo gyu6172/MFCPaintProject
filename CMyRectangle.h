@@ -10,10 +10,10 @@ public:
     int m_bottom;
 
     CMyRectangle();
-    CMyRectangle(CPoint p1, CPoint p2);
-    CMyRectangle(int x1, int y1, int x2, int y2);
 
     void draw(CDC& dc);
     bool isClicked(int x, int y);
+    void doMouseUp(CPoint p);
+    void doMouseDown(CPoint p);
 };
 

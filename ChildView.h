@@ -17,8 +17,8 @@ public:
 
 // 특성입니다.
 public:
-	std::vector<CMyShape*> m_shapes;
-	int m_shapesCnt;
+	std::vector<CMyShape*> m_pShapes;
+	int m_curShape;
 
 // 작업입니다.
 public:
@@ -40,5 +40,7 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnSelectRectangle();
+	afx_msg void OnSelectCircle();
 };
 

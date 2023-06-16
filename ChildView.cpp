@@ -19,7 +19,7 @@
 
 CChildView::CChildView()
 {
-	m_shapesCnt = 0;
+	m_curShape = 0;
 }
 
 CChildView::~CChildView()
@@ -33,6 +33,8 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_SELECT_RECTANGLE, &CChildView::OnSelectRectangle)
+	ON_COMMAND(ID_SELECT_CIRCLE, &CChildView::OnSelectCircle)
 END_MESSAGE_MAP()
 
 
@@ -62,11 +64,12 @@ void CChildView::OnPaint()
 	memDC.CreateCompatibleDC(&dc);
 	CBitmap bitmap;
 	bitmap.CreateCompatibleBitmap(&dc, rect.Width(), rect.Height());
-	memDC.SelectObject(&bitmap);
+	memDC.SelectObject(bitmap);
+	memDC.Rectangle(rect);
 
 	//여기다가 그리기
-	for (int i = 0; i < m_shapesCnt; i++) {
-		m_shapes[i]->draw(memDC);
+	for (int i = 0; i < m_pShapes.size(); i++) {
+		m_pShapes[i]->draw(memDC);
 	}
 
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
@@ -85,8 +88,16 @@ BOOL CChildView::OnEraseBkgnd(CDC* pDC)
 void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CMyRectangle rect(point, point);
-	m_shapes.push_back(&rect);
+	if (m_curShape == 0) {	//사각형
+		CMyShape* shape = new CMyRectangle();
+		shape->doMouseDown(point);
+		m_pShapes.push_back(shape);
+	}
+	else if (m_curShape == 1) {	//원
+		CMyShape* shape = new CMyCircle();
+		shape->doMouseDown(point);
+		m_pShapes.push_back(shape);
+	}
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
@@ -94,7 +105,8 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
+	m_pShapes.back()->doMouseUp(point);
+	Invalidate();
 	CWnd::OnLButtonUp(nFlags, point);
 }
 
@@ -102,12 +114,24 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (m_shapesCnt > 0) {
-		CMyRectangle* tmp = (CMyRectangle*)m_shapes.back();
-		tmp->m_right = point.x;
-		tmp->m_bottom= point.y;
-
+	if (nFlags == MK_LBUTTON) {
+		m_pShapes.back()->doMouseUp(point);
+		Invalidate();
 	}
-	Invalidate();
+
 	CWnd::OnMouseMove(nFlags, point);
+}
+
+
+void CChildView::OnSelectRectangle()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	m_curShape = 0;
+}
+
+
+void CChildView::OnSelectCircle()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	m_curShape = 1;
 }

@@ -8,10 +8,10 @@ public:
     CPoint m_midpoint;
 
     CMyCircle();
-    CMyCircle(CPoint mid, int r);
-    CMyCircle(int x, int y, int r);
 
     void draw(CDC &dc);
     bool isClicked(int x, int y);
+    void doMouseUp(CPoint p);
+    void doMouseDown(CPoint p);
 };
 
