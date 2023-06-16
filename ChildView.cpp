@@ -9,6 +9,8 @@
 #include "CMyShape.h"
 #include "CMyRectangle.h"
 #include "CMyCircle.h"
+#include "CMyCurve.h"
+#include "CMyStar.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +37,8 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_SELECT_RECTANGLE, &CChildView::OnSelectRectangle)
 	ON_COMMAND(ID_SELECT_CIRCLE, &CChildView::OnSelectCircle)
+	ON_COMMAND(ID_SELECT_CURVE, &CChildView::OnSelectCurve)
+	ON_COMMAND(ID_SELECT_STAR, &CChildView::OnSelectStar)
 END_MESSAGE_MAP()
 
 
@@ -67,10 +71,15 @@ void CChildView::OnPaint()
 	memDC.SelectObject(bitmap);
 	memDC.Rectangle(rect);
 
+	CString str;
+	str.Format(_T("Number of Shapes : %d"), m_pShapes.size());
+	memDC.TextOutW(0, 0, str);
+
 	//여기다가 그리기
 	for (int i = 0; i < m_pShapes.size(); i++) {
 		m_pShapes[i]->draw(memDC);
 	}
+
 
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
 }
@@ -95,6 +104,16 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else if (m_curShape == 1) {	//원
 		CMyShape* shape = new CMyCircle();
+		shape->doMouseDown(point);
+		m_pShapes.push_back(shape);
+	}
+	else if (m_curShape == 2) {	//곡선
+		CMyShape* shape = new CMyCurve();
+		shape->doMouseDown(point);
+		m_pShapes.push_back(shape);
+	}
+	else if (m_curShape == 3) {	//별
+		CMyShape* shape = new CMyStar();
 		shape->doMouseDown(point);
 		m_pShapes.push_back(shape);
 	}
@@ -134,4 +153,19 @@ void CChildView::OnSelectCircle()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	m_curShape = 1;
+}
+
+
+void CChildView::OnSelectCurve()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	m_curShape = 2;
+}
+
+
+void CChildView::OnSelectStar()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	m_curShape = 3;
+
 }

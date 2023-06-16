@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CMyRectangle.h"
+#include <algorithm>
 
 CMyRectangle::CMyRectangle()
 {
@@ -32,6 +33,7 @@ bool CMyRectangle::isClicked(int x, int y)
 
 void CMyRectangle::doMouseUp(CPoint p)
 {
+	
 	if (p.x > m_left)
 		m_right = p.x;
 	else

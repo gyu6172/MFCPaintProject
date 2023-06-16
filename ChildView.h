@@ -42,5 +42,7 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnSelectRectangle();
 	afx_msg void OnSelectCircle();
+	afx_msg void OnSelectCurve();
+	afx_msg void OnSelectStar();
 };
 
