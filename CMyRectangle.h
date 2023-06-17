@@ -3,11 +3,15 @@
 class CMyRectangle :
     public CMyShape
 {
+private:
+    CPoint m_P, m_Q;
+
 public:
     int m_left;
     int m_right;
     int m_top;
     int m_bottom;
+
 
     CMyRectangle();
 

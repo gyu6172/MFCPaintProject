@@ -12,7 +12,7 @@ private:
     CPoint m_inpts[5];
 
 public:
-    std::vector<CPoint> m_pts;
+    CPoint m_pts[10];
 
     CMyStar();
 

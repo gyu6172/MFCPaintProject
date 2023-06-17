@@ -3,12 +3,13 @@
 
 CMyCurve::CMyCurve()
 {
-    m_radius = 10;
+    m_radius = 3;
 }
 
 void CMyCurve::draw(CDC& dc)
 {
     CPen pen(PS_SOLID, m_radius, m_shapeColor);
+    dc.SelectObject(pen);
     for (int i = 0; i < m_pts.size()-1; i++) {
         dc.MoveTo(m_pts[i]);
         dc.LineTo(m_pts[i+1]);

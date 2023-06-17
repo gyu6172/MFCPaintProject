@@ -10,12 +10,10 @@ CMyCircle::CMyCircle()
 void CMyCircle::draw(CDC& dc)
 {
 	CPen pen(PS_SOLID, 3, m_borderColor);
-	dc.SelectObject(pen);
-	dc.Ellipse(m_midpoint.x-m_radius, m_midpoint.y-m_radius, m_midpoint.x+m_radius, m_midpoint.y+m_radius);
-
 	CBrush brush(m_shapeColor);
+	dc.SelectObject(pen);
 	dc.SelectObject(brush);
-	dc.Ellipse(m_midpoint.x - m_radius, m_midpoint.y - m_radius, m_midpoint.x + m_radius, m_midpoint.y + m_radius);
+	dc.Ellipse(m_midpoint.x-m_radius, m_midpoint.y-m_radius, m_midpoint.x+m_radius, m_midpoint.y+m_radius);
 
 }
 
