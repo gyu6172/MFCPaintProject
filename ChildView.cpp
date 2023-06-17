@@ -21,7 +21,7 @@
 
 CChildView::CChildView()
 {
-	m_curShape = 0;
+	m_curMode = 0;
 }
 
 CChildView::~CChildView()
@@ -35,10 +35,13 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_SELECT_RECTANGLE, &CChildView::OnSelectRectangle)
-	ON_COMMAND(ID_SELECT_CIRCLE, &CChildView::OnSelectCircle)
-	ON_COMMAND(ID_SELECT_CURVE, &CChildView::OnSelectCurve)
-	ON_COMMAND(ID_SELECT_STAR, &CChildView::OnSelectStar)
+	ON_COMMAND(ID_RECTANGLE, &CChildView::OnRectangle)
+	ON_COMMAND(ID_CIRCLE, &CChildView::OnCircle)
+	ON_COMMAND(ID_CURVE, &CChildView::OnCurve)
+	ON_COMMAND(ID_STAR, &CChildView::OnStar)
+	ON_COMMAND(ID_SELECT, &CChildView::OnSelect)
+	ON_COMMAND(ID_GROUP, &CChildView::OnGroup)
+	ON_COMMAND(ID_UNGROUP, &CChildView::OnUngroup)
 END_MESSAGE_MAP()
 
 
@@ -97,25 +100,28 @@ BOOL CChildView::OnEraseBkgnd(CDC* pDC)
 void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (m_curShape == 0) {	//사각형
+	if (m_curMode == 0) {	//사각형
 		CMyShape* shape = new CMyRectangle();
 		shape->doMouseDown(point);
 		m_pShapes.push_back(shape);
 	}
-	else if (m_curShape == 1) {	//원
+	else if (m_curMode == 1) {	//원
 		CMyShape* shape = new CMyCircle();
 		shape->doMouseDown(point);
 		m_pShapes.push_back(shape);
 	}
-	else if (m_curShape == 2) {	//곡선
+	else if (m_curMode == 2) {	//곡선
 		CMyShape* shape = new CMyCurve();
 		shape->doMouseDown(point);
 		m_pShapes.push_back(shape);
 	}
-	else if (m_curShape == 3) {	//별
+	else if (m_curMode == 3) {	//별
 		CMyShape* shape = new CMyStar();
 		shape->doMouseDown(point);
 		m_pShapes.push_back(shape);
+	}
+	else if (m_curMode == 4) {	//선택모드
+		
 	}
 	CWnd::OnLButtonDown(nFlags, point);
 }
@@ -142,30 +148,49 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 }
 
 
-void CChildView::OnSelectRectangle()
+void CChildView::OnRectangle()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	m_curShape = 0;
+	m_curMode = 0;
 }
 
 
-void CChildView::OnSelectCircle()
+void CChildView::OnCircle()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	m_curShape = 1;
+	m_curMode = 1;
 }
 
 
-void CChildView::OnSelectCurve()
+void CChildView::OnCurve()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	m_curShape = 2;
+	m_curMode = 2;
 }
 
 
-void CChildView::OnSelectStar()
+void CChildView::OnStar()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	m_curShape = 3;
+	m_curMode = 3;
 
+}
+
+
+void CChildView::OnSelect()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	m_curMode = 4;
+}
+
+
+void CChildView::OnGroup()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CChildView::OnUngroup()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
