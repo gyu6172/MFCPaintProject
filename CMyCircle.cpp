@@ -17,9 +17,9 @@ void CMyCircle::draw(CDC& dc)
 
 }
 
-bool CMyCircle::isClicked(int x, int y)
+bool CMyCircle::isClicked(CPoint p)
 {
-	int distance = sqrt((m_midpoint.x-x)*(m_midpoint.x-x) + (m_midpoint.y-y)*(m_midpoint.y-y));
+	int distance = sqrt((m_midpoint.x-p.x)*(m_midpoint.x-p.x) + (m_midpoint.y-p.y)*(m_midpoint.y-p.y));
 	if(distance <= m_radius) return true;
 	else return false;
 }
@@ -45,4 +45,15 @@ void CMyCircle::doMouseDown(CPoint p)
 	m_lt.y = m_midpoint.y - 5;
 	m_rb.x = m_midpoint.x + 5;
 	m_rb.y = m_midpoint.y + 5;
+}
+
+void CMyCircle::move(int dx, int dy)
+{
+	m_midpoint.x += dx;
+	m_midpoint.y += dy;
+
+	m_lt.x += dx; 
+	m_lt.y += dy;
+	m_rb.x += dx;
+	m_rb.y += dy;
 }

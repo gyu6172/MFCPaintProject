@@ -8,3 +8,11 @@ CMyShape::CMyShape()
 	m_shapeColor = RGB(rand()%256, rand() % 256, rand() % 256);
 	m_borderColor = RGB(rand()%256, rand() % 256, rand() % 256);
 }
+
+void CMyShape::setBorder(CDC &dc)
+{
+	CPen pen(PS_DOT, 1, RGB(255,0,0));
+	dc.SelectObject(pen);
+	dc.SelectStockObject(NULL_BRUSH);
+	dc.Rectangle(m_lt.x, m_lt.y, m_rb.x, m_rb.y);
+}

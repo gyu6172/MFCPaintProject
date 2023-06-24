@@ -18,7 +18,7 @@ void CMyStar::draw(CDC& dc)
 
 }
 
-bool CMyStar::isClicked(int x, int y)
+bool CMyStar::isClicked(CPoint p)
 {
     return false;
 }
@@ -49,6 +49,11 @@ void CMyStar::doMouseUp(CPoint p)
 		m_pts[2*i+1] = m_inpts[(i+3)%5];
 	}
 
+	m_lt.x = m_midpoint.x - m_radius;
+	m_lt.y = m_midpoint.y - m_radius;
+	m_rb.x = m_midpoint.x + m_radius;
+	m_rb.y = m_midpoint.y + m_radius;
+
 }
 
 void CMyStar::doMouseDown(CPoint p)
@@ -58,4 +63,19 @@ void CMyStar::doMouseDown(CPoint p)
 
 	m_lt = CPoint(0,0);
 	m_rb = CPoint(0,0);
+}
+
+void CMyStar::move(int dx, int dy)
+{
+	for (int i = 0; i < 10; i++) {
+		m_pts[i].x += dx;
+		m_pts[i].y += dy;
+	}
+	m_midpoint.x += dx;
+	m_midpoint.y += dy;
+
+	m_lt.x += dx;
+	m_lt.y += dy;
+	m_rb.x += dx;
+	m_rb.y += dy;
 }

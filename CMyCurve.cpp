@@ -16,11 +16,11 @@ void CMyCurve::draw(CDC& dc)
     }
 }
 
-bool CMyCurve::isClicked(int x, int y)
+bool CMyCurve::isClicked(CPoint p)
 {
     float min_dist = FLT_MAX;
     for (auto pt : m_pts) {
-        float dist = sqrt((pt.x-x)*(pt.x-x) + (pt.y-y)*(pt.y-y));
+        float dist = sqrt((pt.x-p.x)*(pt.x-p.x) + (pt.y-p.y)*(pt.y-p.y));
         if (dist < min_dist) {
             min_dist = dist;
         }
@@ -33,10 +33,35 @@ void CMyCurve::doMouseUp(CPoint p)
 {
     m_pts.push_back(p);
 
+    int minx = INT_MAX, miny = INT_MAX;
+    int maxx = -1, maxy = -1;
+    for (auto p : m_pts) {
+        minx = min(minx, p.x);
+        miny = min(miny, p.y);
+        maxx = max(maxx, p.x);
+        maxy = max(maxy, p.y);
+    }
+    m_lt.x = minx;
+    m_lt.y = miny;
+    m_rb.x = maxx;
+    m_rb.y = maxy;
 }
 
 void CMyCurve::doMouseDown(CPoint p)
 {
     
     m_pts.push_back(p);
+}
+
+void CMyCurve::move(int dx, int dy)
+{
+    for (auto p : m_pts) {
+        p.x += dx;
+        p.y += dy;
+    }
+     
+    m_lt.x += dx;
+    m_lt.y += dy;
+    m_rb.x += dx;
+    m_rb.y += dy;
 }

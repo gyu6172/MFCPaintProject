@@ -8,8 +8,10 @@ protected:
 public:
 	CMyShape();
 	virtual void draw(CDC &dc) = 0;
-	virtual bool isClicked(int x, int y) = 0;
+	virtual bool isClicked(CPoint p) = 0;
 	virtual void doMouseUp(CPoint p) = 0;
 	virtual void doMouseDown(CPoint p) = 0;
+	virtual void move(int dx, int dy) = 0;
+	void setBorder(CDC &dc);
 };
 

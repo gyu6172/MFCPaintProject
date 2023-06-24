@@ -19,6 +19,10 @@ public:
 public:
 	std::vector<CMyShape*> m_pShapes;
 	int m_curMode;
+	CPoint m_selectP1;
+	CPoint m_selectP2;
+	bool m_isMouseDown;
+	std::vector<CMyShape*> m_selectedShapes;
 
 // 작업입니다.
 public:

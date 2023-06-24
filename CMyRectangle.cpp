@@ -22,9 +22,9 @@ void CMyRectangle::draw(CDC& dc)
 
 }
 
-bool CMyRectangle::isClicked(int x, int y)
+bool CMyRectangle::isClicked(CPoint p)
 {
-	if (m_left <= x && x <= m_right && m_top <= y && y <= m_bottom) {
+	if (m_left <= p.x && p.x <= m_right && m_top <= p.y && p.y <= m_bottom) {
 		return true;
 	}
 	else {
@@ -63,4 +63,22 @@ void CMyRectangle::doMouseDown(CPoint p)
 	m_lt.y = m_top - 5;
 	m_rb.x = m_right + 5;
 	m_rb.y = m_bottom + 5;
+}
+
+void CMyRectangle::move(int dx, int dy)
+{
+	m_P.x += dx;
+	m_P.y += dy;
+	m_Q.x += dx;
+	m_Q.y += dy;
+
+	m_left += dx;
+	m_right += dx;
+	m_top += dy;
+	m_bottom += dy;
+
+	m_lt.x += dx;
+	m_lt.y += dy;
+	m_rb.x += dx;
+	m_rb.y += dy;
 }

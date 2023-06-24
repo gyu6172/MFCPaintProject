@@ -17,8 +17,9 @@ public:
     CMyStar();
 
     void draw(CDC& dc);
-    bool isClicked(int x, int y);
+    bool isClicked(CPoint p);
     void doMouseUp(CPoint p);
     void doMouseDown(CPoint p);
+    void move(int dx, int dy);
 };
 
