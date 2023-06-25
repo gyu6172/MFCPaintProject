@@ -349,6 +349,30 @@ void CChildView::OnUpdateUngroup(CCmdUI* pCmdUI)
 void CChildView::OnBringfront()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+
+	while (selectedPos != NULL) {
+
+		POSITION pShapePos = m_pShapes.GetHeadPosition();
+		POSITION prevSelected = selectedPos;
+		CMyShape*& selected = m_selectedShapes.m_group.GetNext(selectedPos);
+
+		while (pShapePos != NULL) {
+
+			POSITION pShapeprev = pShapePos;
+			CMyShape*& pShape = m_pShapes.GetNext(pShapePos);
+
+			if (pShape == selected) {
+				m_pShapes.RemoveAt(pShapeprev);
+				m_pShapes.AddTail(pShape);
+
+				m_selectedShapes.m_group.RemoveAt(prevSelected);
+				m_selectedShapes.m_group.AddTail(selected);
+			}
+		}
+	}
+
+	Invalidate();
 }
 
 
@@ -392,7 +416,28 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (nChar == VK_DELETE) {
-		
+
+		POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+
+		while (selectedPos != NULL) {
+
+			POSITION prevSelected = selectedPos;
+			CMyShape*& selected = m_selectedShapes.m_group.GetNext(selectedPos);
+			POSITION pShapePos = m_pShapes.GetHeadPosition();
+
+			while (pShapePos != NULL) {
+				
+				POSITION pShapeprev = pShapePos;
+
+				CMyShape*& pShape = m_pShapes.GetNext(pShapePos);
+
+				if (pShape == selected) {
+					m_pShapes.RemoveAt(pShapeprev);
+					m_selectedShapes.m_group.RemoveAt(prevSelected);
+				}
+			}
+		}
+		Invalidate();
 	}
 
 	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
