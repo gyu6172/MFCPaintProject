@@ -28,9 +28,10 @@
 CChildView::CChildView()
 {
 	m_curMode = 0;
-	m_selectP1 = CPoint(0,0);
-	m_selectP2 = CPoint(0,0);
+	m_clickPos1 = CPoint(0,0);
+	m_clickPos2 = CPoint(0,0);
 	m_isMouseDown = false;
+	m_isSelected = false;
 }
 
 CChildView::~CChildView()
@@ -92,11 +93,16 @@ void CChildView::OnPaint()
 		m_pShapes[i]->draw(memDC);
 	}
 
-	if (m_curMode == SELECTMODE && m_isMouseDown) {
-		CPen pen(PS_DOT, 1, RGB(0,0,0));
-		memDC.SelectObject(pen);
-		memDC.SelectStockObject(NULL_BRUSH);
-		memDC.Rectangle(m_selectP1.x, m_selectP1.y, m_selectP2.x, m_selectP2.y);
+	if (m_curMode == SELECTMODE) {
+		if (m_isMouseDown) {
+			CPen pen(PS_DOT, 1, RGB(0, 0, 0));
+			memDC.SelectObject(pen);
+			memDC.SelectStockObject(NULL_BRUSH);
+			memDC.Rectangle(m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
+		}
+		for (auto shape : m_selectedShapes.m_group) {
+			shape->setBorder(memDC);
+		}
 	}
 
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &memDC, 0, 0, SRCCOPY);
@@ -136,8 +142,28 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pShapes.push_back(shape);
 	}
 	else if (m_curMode == SELECTMODE) {	//선택모드
-		m_isMouseDown = true;
-		m_selectP1 = CPoint(point);
+		TRACE("nFlags = %d, MK_SHIFT = %d\n",nFlags, MK_SHIFT);
+		m_clickPos1 = CPoint(point);
+		m_clickPos2 = CPoint(point);
+		for (auto shape : m_pShapes) {
+			if (shape->isClicked(point)) {
+				m_isSelected = true;
+				if (nFlags & MK_SHIFT) {
+					m_selectedShapes.addShape(shape);
+					Invalidate();
+				}
+				else {
+					m_selectedShapes.clear();
+					m_selectedShapes.addShape(shape);
+					Invalidate();
+				}
+			}
+		}
+		if (!m_isSelected) {
+			m_selectedShapes.clear();
+			Invalidate();
+			m_isMouseDown = true;
+		}
 	}
 	CWnd::OnLButtonDown(nFlags, point);
 }
@@ -146,13 +172,27 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	TRACE("p1=(%d, %d), p2=(%d,%d)\n", m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
 	if (m_curMode != SELECTMODE) {
 		m_pShapes.back()->doMouseUp(point);
 		Invalidate();
 	}
 	else {
-		m_selectP2 = CPoint(point);
+		m_clickPos2 = CPoint(point);
 		m_isMouseDown = false;
+		m_isSelected = false;
+
+		int left = min(m_clickPos1.x, m_clickPos2.x);
+		int top = min(m_clickPos1.y, m_clickPos2.y);
+		int right = max(m_clickPos1.x, m_clickPos2.x);
+		int bottom = max(m_clickPos1.y, m_clickPos2.y);
+
+		for (auto p : m_pShapes) {
+			if (p->m_lt.x>left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
+				m_selectedShapes.addShape(p);
+				m_isSelected = true;
+			}
+		}
 		Invalidate();
 	}
 	CWnd::OnLButtonUp(nFlags, point);
@@ -162,14 +202,24 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (nFlags == MK_LBUTTON) {
+	if (nFlags & MK_LBUTTON) {
 		if (m_curMode != SELECTMODE) {
 			m_pShapes.back()->doMouseUp(point);
 			Invalidate();
 		}
 		else {
-			m_selectP2 = CPoint(point);
-			Invalidate();
+			if (!m_isSelected) {
+				m_clickPos2 = CPoint(point);
+				Invalidate();
+			}
+			else {
+				m_clickPos2 = CPoint(point);
+				int dx = m_clickPos2.x - m_clickPos1.x;
+				int dy = m_clickPos2.y - m_clickPos1.y;
+				m_clickPos1 = m_clickPos2;
+				m_selectedShapes.move(dx, dy);
+				Invalidate();
+;			}
 		}
 	}
 

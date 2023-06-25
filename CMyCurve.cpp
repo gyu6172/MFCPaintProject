@@ -51,13 +51,14 @@ void CMyCurve::doMouseDown(CPoint p)
 {
     
     m_pts.push_back(p);
+
 }
 
 void CMyCurve::move(int dx, int dy)
 {
-    for (auto p : m_pts) {
-        p.x += dx;
-        p.y += dy;
+    for (auto pt : m_pts) {
+        pt.x += dx;
+        pt.y += dy;
     }
      
     m_lt.x += dx;

@@ -9,6 +9,7 @@
 // CChildView 창
 #include <vector>
 #include "CMyShape.h"
+#include "CMyGroup.h"
 class CChildView : public CWnd
 {
 // 생성입니다.
@@ -19,10 +20,11 @@ public:
 public:
 	std::vector<CMyShape*> m_pShapes;
 	int m_curMode;
-	CPoint m_selectP1;
-	CPoint m_selectP2;
+	CPoint m_clickPos1;
+	CPoint m_clickPos2;
+	bool m_isSelected;
 	bool m_isMouseDown;
-	std::vector<CMyShape*> m_selectedShapes;
+	CMyGroup m_selectedShapes;
 
 // 작업입니다.
 public:

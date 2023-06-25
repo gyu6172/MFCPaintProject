@@ -2,10 +2,10 @@
 class CMyShape
 {
 protected:
-	CPoint m_lt, m_rb;
 	COLORREF m_shapeColor, m_borderColor;
 
 public:
+	CPoint m_lt, m_rb;
 	CMyShape();
 	virtual void draw(CDC &dc) = 0;
 	virtual bool isClicked(CPoint p) = 0;
