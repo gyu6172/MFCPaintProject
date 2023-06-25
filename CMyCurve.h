@@ -7,7 +7,7 @@ class CMyCurve :
 private:
     int m_radius;
  public:
-    std::vector<CPoint> m_pts;
+    CList<CPoint> m_pts;
 
     CMyCurve();
 

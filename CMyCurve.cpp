@@ -10,17 +10,20 @@ void CMyCurve::draw(CDC& dc)
 {
     CPen pen(PS_SOLID, m_radius, m_shapeColor);
     dc.SelectObject(pen);
-    for (int i = 0; i < m_pts.size()-1; i++) {
-        dc.MoveTo(m_pts[i]);
-        dc.LineTo(m_pts[i+1]);
+    POSITION pos = m_pts.GetHeadPosition();
+    while (pos != NULL) {
+        dc.MoveTo(m_pts.GetNext(pos));
+        if(pos==NULL) break;
+        dc.LineTo(m_pts.GetAt(pos));
     }
 }
 
 bool CMyCurve::isClicked(CPoint p)
 {
     float min_dist = FLT_MAX;
-    for (auto pt : m_pts) {
-        float dist = sqrt((pt.x-p.x)*(pt.x-p.x) + (pt.y-p.y)*(pt.y-p.y));
+    POSITION pos = m_pts.GetHeadPosition();
+    while (pos != NULL) {
+        float dist = sqrt((m_pts.GetAt(pos).x - p.x) * (m_pts.GetAt(pos).x - p.x) + (m_pts.GetAt(pos).y - p.y) * (m_pts.GetNext(pos).y - p.y));
         if (dist < min_dist) {
             min_dist = dist;
         }
@@ -31,35 +34,32 @@ bool CMyCurve::isClicked(CPoint p)
 
 void CMyCurve::doMouseUp(CPoint p)
 {
-    m_pts.push_back(p);
+    m_pts.AddTail(p);
 
-    int minx = INT_MAX, miny = INT_MAX;
-    int maxx = -1, maxy = -1;
-    for (auto p : m_pts) {
-        minx = min(minx, p.x);
-        miny = min(miny, p.y);
-        maxx = max(maxx, p.x);
-        maxy = max(maxy, p.y);
-    }
-    m_lt.x = minx;
-    m_lt.y = miny;
-    m_rb.x = maxx;
-    m_rb.y = maxy;
+    m_lt.x = min(m_lt.x, p.x);
+    m_lt.y = min(m_lt.y, p.y);
+    m_rb.x = max(m_rb.x, p.x);
+    m_rb.y = max(m_rb.y, p.y);
 }
 
 void CMyCurve::doMouseDown(CPoint p)
 {
     
-    m_pts.push_back(p);
+    m_pts.AddTail(p);
+
+    m_lt.x = p.x-5;
+    m_lt.y = p.y-5;
+    m_rb.x = p.x+5;
+    m_rb.y = p.y+5;
 
 }
 
 void CMyCurve::move(int dx, int dy)
 {
-    for (auto pt : m_pts) {
-        pt.x += dx;
-        pt.y += dy;
-        TRACE("pt(%d, %d)\n",pt.x,pt.y);
+    POSITION pos = m_pts.GetHeadPosition();
+    while (pos != NULL) {
+        m_pts.GetAt(pos).x += dx;
+        m_pts.GetNext(pos).y += dy;
     }
      
     m_lt.x += dx;

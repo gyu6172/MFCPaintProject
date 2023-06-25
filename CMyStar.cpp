@@ -79,10 +79,10 @@ void CMyStar::doMouseUp(CPoint p)
 		m_pts[2*i+1] = m_inpts[(i+3)%5];
 	}
 
-	m_lt.x = m_midpoint.x - m_radius;
-	m_lt.y = m_midpoint.y - m_radius;
-	m_rb.x = m_midpoint.x + m_radius;
-	m_rb.y = m_midpoint.y + m_radius;
+	m_lt.x = m_midpoint.x - m_radius-5;
+	m_lt.y = m_midpoint.y - m_radius-5;
+	m_rb.x = m_midpoint.x + m_radius+5;
+	m_rb.y = m_midpoint.y + m_radius+5;
 
 }
 
