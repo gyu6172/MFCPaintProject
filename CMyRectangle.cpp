@@ -45,8 +45,6 @@ void CMyRectangle::doMouseUp(CPoint p)
 	m_lt.y = m_top - 5;
 	m_rb.x = m_right + 5;
 	m_rb.y = m_bottom + 5;
-
-	TRACE("lt:(%d, %d), rb:(%d, %d)\n",m_left, m_top, m_right, m_bottom);
 }
 
 void CMyRectangle::doMouseDown(CPoint p)

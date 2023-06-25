@@ -88,6 +88,10 @@ void CChildView::OnPaint()
 	str.Format(_T("Number of Shapes : %d"), m_pShapes.size());
 	memDC.TextOutW(0, 0, str);
 
+	CString str1;
+	str1.Format(_T("Number of Selected : %d"), m_selectedShapes.m_group.size());
+	memDC.TextOutW(0, 20, str1);
+
 	//여기다가 그리기
 	for (int i = 0; i < m_pShapes.size(); i++) {
 		m_pShapes[i]->draw(memDC);
@@ -142,7 +146,7 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pShapes.push_back(shape);
 	}
 	else if (m_curMode == SELECTMODE) {	//선택모드
-		TRACE("nFlags = %d, MK_SHIFT = %d\n",nFlags, MK_SHIFT);
+		
 		m_clickPos1 = CPoint(point);
 		m_clickPos2 = CPoint(point);
 		for (auto shape : m_pShapes) {
@@ -172,7 +176,6 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	TRACE("p1=(%d, %d), p2=(%d,%d)\n", m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
 	if (m_curMode != SELECTMODE) {
 		m_pShapes.back()->doMouseUp(point);
 		Invalidate();
@@ -189,6 +192,7 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 
 		for (auto p : m_pShapes) {
 			if (p->m_lt.x>left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
+				TRACE("여기불림");
 				m_selectedShapes.addShape(p);
 				m_isSelected = true;
 			}
@@ -203,6 +207,7 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (nFlags & MK_LBUTTON) {
+		TRACE("p1=(%d, %d), p2=(%d,%d)\n", m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
 		if (m_curMode != SELECTMODE) {
 			m_pShapes.back()->doMouseUp(point);
 			Invalidate();

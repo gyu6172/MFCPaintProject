@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "CMyShape.h"
+#include <algorithm>
 class CMyGroup : public CMyShape
 {
 

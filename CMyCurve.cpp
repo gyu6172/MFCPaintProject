@@ -59,6 +59,7 @@ void CMyCurve::move(int dx, int dy)
     for (auto pt : m_pts) {
         pt.x += dx;
         pt.y += dy;
+        TRACE("pt(%d, %d)\n",pt.x,pt.y);
     }
      
     m_lt.x += dx;

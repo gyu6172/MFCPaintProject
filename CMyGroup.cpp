@@ -24,6 +24,7 @@ CMyGroup::CMyGroup(CMyShape* shape)
 {
     m_group.push_back(shape);
     updateLTRB();
+
 }
 
 CMyGroup::CMyGroup(std::vector<CMyShape*> shapes)
@@ -75,6 +76,11 @@ void CMyGroup::doMouseDown(CPoint p)
 
 void CMyGroup::addShape(CMyShape* p)
 {
+    for (auto shape : m_group) {
+        if (shape == p) {
+            return;
+        }
+    }
     m_group.push_back(p);
     updateLTRB();
 }
