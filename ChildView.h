@@ -58,10 +58,11 @@ public:
 	afx_msg void OnUpdateCircle(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateGroup(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateUngroup(CCmdUI* pCmdUI);
-	afx_msg void OnBringback();
+//	afx_msg void OnBringback();
 	afx_msg void OnBringfront();
 	afx_msg void OnUpdateBringback(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateBringfront(CCmdUI* pCmdUI);
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnBringback();
 };
 

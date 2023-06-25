@@ -52,12 +52,16 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_COMMAND(ID_SELECT, &CChildView::OnSelect)
 	ON_COMMAND(ID_GROUP, &CChildView::OnGroup)
 	ON_COMMAND(ID_UNGROUP, &CChildView::OnUngroup)
+	ON_COMMAND(ID_BRINGFRONT, &CChildView::OnBringfront)
+	ON_COMMAND(ID_BRINGBACK, &CChildView::OnBringback)
 	ON_UPDATE_COMMAND_UI(ID_RECTANGLE, &CChildView::OnUpdateRectangle)
 	ON_UPDATE_COMMAND_UI(ID_SELECT, &CChildView::OnUpdateSelect)
 	ON_UPDATE_COMMAND_UI(ID_CURVE, &CChildView::OnUpdateCurve)
 	ON_UPDATE_COMMAND_UI(ID_CIRCLE, &CChildView::OnUpdateCircle)
 	ON_UPDATE_COMMAND_UI(ID_GROUP, &CChildView::OnUpdateGroup)
 	ON_UPDATE_COMMAND_UI(ID_UNGROUP, &CChildView::OnUpdateUngroup)
+	ON_UPDATE_COMMAND_UI(ID_BRINGFRONT, &CChildView::OnUpdateBringfront)
+	ON_UPDATE_COMMAND_UI(ID_BRINGBACK, &CChildView::OnUpdateBringback)
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
@@ -339,13 +343,6 @@ void CChildView::OnUpdateUngroup(CCmdUI* pCmdUI)
 	else pCmdUI->Enable(false);
 }
 
-
-void CChildView::OnBringback()
-{
-	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-}
-
-
 void CChildView::OnBringfront()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -379,4 +376,10 @@ void CChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 		TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 		point.x, point.y, AfxGetMainWnd());
 
+}
+
+
+void CChildView::OnBringback()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
