@@ -52,6 +52,17 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_COMMAND(ID_SELECT, &CChildView::OnSelect)
 	ON_COMMAND(ID_GROUP, &CChildView::OnGroup)
 	ON_COMMAND(ID_UNGROUP, &CChildView::OnUngroup)
+	ON_UPDATE_COMMAND_UI(ID_RECTANGLE, &CChildView::OnUpdateRectangle)
+	ON_UPDATE_COMMAND_UI(ID_SELECT, &CChildView::OnUpdateSelect)
+	ON_UPDATE_COMMAND_UI(ID_CURVE, &CChildView::OnUpdateCurve)
+	ON_UPDATE_COMMAND_UI(ID_CIRCLE, &CChildView::OnUpdateCircle)
+	ON_UPDATE_COMMAND_UI(ID_GROUP, &CChildView::OnUpdateGroup)
+	ON_UPDATE_COMMAND_UI(ID_UNGROUP, &CChildView::OnUpdateUngroup)
+	ON_COMMAND(ID_BRINGBACK, &CChildView::OnBringback)
+	ON_COMMAND(ID_BRINGFRONT, &CChildView::OnBringfront)
+	ON_UPDATE_COMMAND_UI(ID_BRINGBACK, &CChildView::OnUpdateBringback)
+	ON_UPDATE_COMMAND_UI(ID_BRINGFRONT, &CChildView::OnUpdateBringfront)
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 
@@ -192,7 +203,7 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 
 		for (auto p : m_pShapes) {
 			if (p->m_lt.x>left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
-				TRACE("여기불림");
+				
 				m_selectedShapes.addShape(p);
 			}
 		}
@@ -276,4 +287,95 @@ void CChildView::OnGroup()
 void CChildView::OnUngroup()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CChildView::OnUpdateRectangle(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_curMode == RECTANGLEMODE) pCmdUI->SetCheck(true);
+	else pCmdUI->SetCheck(false);
+	
+}
+
+
+void CChildView::OnUpdateSelect(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_curMode == SELECTMODE) pCmdUI->SetCheck(true);
+	else pCmdUI->SetCheck(false);
+}
+
+
+void CChildView::OnUpdateCurve(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_curMode == CURVEMODE) pCmdUI->SetCheck(true);
+	else pCmdUI->SetCheck(false);
+}
+
+
+void CChildView::OnUpdateCircle(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_curMode == CIRCLEMODE) pCmdUI->SetCheck(true);
+	else pCmdUI->SetCheck(false);
+}
+
+
+void CChildView::OnUpdateGroup(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if(m_selectedShapes.m_group.size()>1) pCmdUI->Enable(true);
+	else pCmdUI->Enable(false);
+}
+
+
+void CChildView::OnUpdateUngroup(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	else pCmdUI->Enable(false);
+}
+
+
+void CChildView::OnBringback()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CChildView::OnBringfront()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CChildView::OnUpdateBringback(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if(m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	else pCmdUI->Enable(false);
+}
+
+
+void CChildView::OnUpdateBringfront(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	if (m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	else pCmdUI->Enable(false);
+}
+
+
+void CChildView::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	CMenu menu;
+	menu.LoadMenuW(IDR_MAINFRAME);
+
+	CMenu *pMenu = menu.GetSubMenu(4);
+	pMenu->TrackPopupMenu(
+		TPM_LEFTALIGN | TPM_RIGHTBUTTON,
+		point.x, point.y, AfxGetMainWnd());
+
 }
