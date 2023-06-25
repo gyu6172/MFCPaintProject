@@ -7,7 +7,6 @@
 
 
 // CChildView 창
-#include <vector>
 #include "CMyShape.h"
 #include "CMyGroup.h"
 class CChildView : public CWnd
@@ -18,7 +17,7 @@ public:
 
 // 특성입니다.
 public:
-	std::vector<CMyShape*> m_pShapes;
+	CList<CMyShape*> m_pShapes;
 	int m_curMode;
 	CPoint m_clickPos1;
 	CPoint m_clickPos2;

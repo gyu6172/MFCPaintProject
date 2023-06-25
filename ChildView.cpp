@@ -92,7 +92,7 @@ void CChildView::OnPaint()
 	memDC.Rectangle(rect);
 
 	CString str;
-	str.Format(_T("Number of Shapes : %d"), m_pShapes.size());
+	str.Format(_T("Number of Shapes : %d"), m_pShapes.GetSize());
 	memDC.TextOutW(0, 0, str);
 
 	CString str1;
@@ -100,8 +100,9 @@ void CChildView::OnPaint()
 	memDC.TextOutW(0, 20, str1);
 
 	//여기다가 그리기
-	for (int i = 0; i < m_pShapes.size(); i++) {
-		m_pShapes[i]->draw(memDC);
+	POSITION pos = m_pShapes.GetHeadPosition();
+	while (pos != NULL) {
+		m_pShapes.GetNext(pos)->draw(memDC);
 	}
 
 	if (m_curMode == SELECTMODE) {
@@ -135,28 +136,30 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (m_curMode == RECTANGLEMODE) {	//사각형
 		CMyShape* shape = new CMyRectangle();
 		shape->doMouseDown(point);
-		m_pShapes.push_back(shape);
+		m_pShapes.AddTail(shape);
 	}
 	else if (m_curMode == CIRCLEMODE) {	//원
 		CMyShape* shape = new CMyCircle();
 		shape->doMouseDown(point);
-		m_pShapes.push_back(shape);
+		m_pShapes.AddTail(shape);
 	}
 	else if (m_curMode == CURVEMODE) {	//곡선
 		CMyShape* shape = new CMyCurve();
 		shape->doMouseDown(point);
-		m_pShapes.push_back(shape);
+		m_pShapes.AddTail(shape);
 	}
 	else if (m_curMode == STARMODE) {	//별
 		CMyShape* shape = new CMyStar();
 		shape->doMouseDown(point);
-		m_pShapes.push_back(shape);
+		m_pShapes.AddTail(shape);
 	}
 	else if (m_curMode == SELECTMODE) {	//선택모드
 		
 		m_clickPos1 = CPoint(point);
 		m_clickPos2 = CPoint(point);
-		for (auto shape : m_pShapes) {
+		POSITION pos = m_pShapes.GetHeadPosition();
+		while (pos != NULL) {
+			CMyShape*& shape = m_pShapes.GetNext(pos);
 			if (shape->isClicked(point)) {
 				m_isSelected = true;
 				if (nFlags & MK_SHIFT) {
@@ -184,7 +187,7 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (m_curMode != SELECTMODE) {
-		m_pShapes.back()->doMouseUp(point);
+		m_pShapes.GetTail()->doMouseUp(point);
 		Invalidate();
 	}
 	else {
@@ -197,9 +200,11 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 		int right = max(m_clickPos1.x, m_clickPos2.x);
 		int bottom = max(m_clickPos1.y, m_clickPos2.y);
 
-		for (auto p : m_pShapes) {
-			if (p->m_lt.x>left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
-				
+		POSITION pos = m_pShapes.GetHeadPosition();
+		while (pos != NULL) {
+			CMyShape*& p = m_pShapes.GetNext(pos);
+			if (p->m_lt.x > left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
+
 				m_selectedShapes.addShape(p);
 			}
 		}
@@ -215,7 +220,7 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 	if (nFlags & MK_LBUTTON) {
 		TRACE("p1=(%d, %d), p2=(%d,%d)\n", m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
 		if (m_curMode != SELECTMODE) {
-			m_pShapes.back()->doMouseUp(point);
+			m_pShapes.GetTail()->doMouseUp(point);
 			Invalidate();
 		}
 		else {
