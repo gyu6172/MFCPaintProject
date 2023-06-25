@@ -63,6 +63,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_UPDATE_COMMAND_UI(ID_BRINGFRONT, &CChildView::OnUpdateBringfront)
 	ON_UPDATE_COMMAND_UI(ID_BRINGBACK, &CChildView::OnUpdateBringback)
 	ON_WM_CONTEXTMENU()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -100,7 +101,7 @@ void CChildView::OnPaint()
 	memDC.TextOutW(0, 0, str);
 
 	CString str1;
-	str1.Format(_T("Number of Selected : %d"), m_selectedShapes.m_group.size());
+	str1.Format(_T("Number of Selected : %d"), m_selectedShapes.m_group.GetSize());
 	memDC.TextOutW(0, 20, str1);
 
 	//여기다가 그리기
@@ -116,8 +117,10 @@ void CChildView::OnPaint()
 			memDC.SelectStockObject(NULL_BRUSH);
 			memDC.Rectangle(m_clickPos1.x, m_clickPos1.y, m_clickPos2.x, m_clickPos2.y);
 		}
-		for (auto shape : m_selectedShapes.m_group) {
-			shape->setBorder(memDC);
+		POSITION pos = m_selectedShapes.m_group.GetHeadPosition();
+		while (pos != NULL) {
+			CMyShape* pShape = m_selectedShapes.m_group.GetNext(pos);
+			pShape->setBorder(memDC);
 		}
 	}
 
@@ -331,7 +334,7 @@ void CChildView::OnUpdateCircle(CCmdUI* pCmdUI)
 void CChildView::OnUpdateGroup(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(m_selectedShapes.m_group.size()>1) pCmdUI->Enable(true);
+	if(m_selectedShapes.m_group.GetSize()>1) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -339,7 +342,7 @@ void CChildView::OnUpdateGroup(CCmdUI* pCmdUI)
 void CChildView::OnUpdateUngroup(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if (m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	if (m_selectedShapes.m_group.GetSize() > 0) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -352,7 +355,7 @@ void CChildView::OnBringfront()
 void CChildView::OnUpdateBringback(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	if(m_selectedShapes.m_group.GetSize() > 0) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -360,7 +363,7 @@ void CChildView::OnUpdateBringback(CCmdUI* pCmdUI)
 void CChildView::OnUpdateBringfront(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if (m_selectedShapes.m_group.size() > 0) pCmdUI->Enable(true);
+	if (m_selectedShapes.m_group.GetSize() > 0) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -382,4 +385,15 @@ void CChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 void CChildView::OnBringback()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (nChar == VK_DELETE) {
+		
+	}
+
+	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
 }

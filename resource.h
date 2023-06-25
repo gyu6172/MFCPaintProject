@@ -31,13 +31,18 @@
 #define ID_CURVE                        32796
 #define ID_STAR                         32797
 #define ID_SSTAR                        32798
+#define ID_ACTION_ALIGN                 32799
+#define ID_ALIGN_BRINGFRONT             32800
+#define ID_ALIGN_BRINGBACK              32801
+#define ID_BRINGFRONT                   32802
+#define ID_BRINGBACK                    32803
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32799
+#define _APS_NEXT_COMMAND_VALUE         32804
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

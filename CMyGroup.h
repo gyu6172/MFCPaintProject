@@ -9,7 +9,7 @@ private:
 	void updateLTRB();
 
 public:
-	std::vector<CMyShape*> m_group;
+	CList<CMyShape*> m_group;
 
 	CMyGroup();
 	CMyGroup(CMyShape* shape);
