@@ -11,6 +11,9 @@ private:
     CPoint m_outpts[5];
     CPoint m_inpts[5];
 
+    bool isLeft(CPoint P, CPoint Q, CPoint R);
+    bool isIn(CPoint p, CPoint p1, CPoint p2, CPoint p3);
+
 public:
     CPoint m_pts[10];
 

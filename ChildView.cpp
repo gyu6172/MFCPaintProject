@@ -194,7 +194,6 @@ void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
 			if (p->m_lt.x>left && p->m_lt.y > top && p->m_rb.x < right && p->m_rb.y < bottom) {
 				TRACE("여기불림");
 				m_selectedShapes.addShape(p);
-				m_isSelected = true;
 			}
 		}
 		Invalidate();

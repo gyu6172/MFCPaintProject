@@ -1,6 +1,25 @@
 #include "pch.h"
 #include "CMyStar.h"
 
+bool CMyStar::isLeft(CPoint P, CPoint Q, CPoint R)
+{
+	CPoint PQ = CPoint(Q.x-P.x, Q.y-P.y);
+	CPoint PR = CPoint(R.x-P.x, R.y-P.y);
+
+	int crossProduct = (PQ.x*PR.y) - (PQ.y*PR.x);
+
+	if(crossProduct < 0) return false;
+	else return true;
+}
+
+bool CMyStar::isIn(CPoint p, CPoint p1, CPoint p2, CPoint p3)
+{
+	if (isLeft(p1, p2, p)) return false;
+	if (isLeft(p2, p3, p)) return false;
+	if (isLeft(p3, p1, p)) return false;
+	return true;
+}
+
 CMyStar::CMyStar()
 {
 	m_midpoint = CPoint(0,0);
@@ -20,7 +39,18 @@ void CMyStar::draw(CDC& dc)
 
 bool CMyStar::isClicked(CPoint p)
 {
-    return false;
+	int distance = sqrt((m_midpoint.x - p.x) * (m_midpoint.x - p.x) + (m_midpoint.y - p.y) * (m_midpoint.y - p.y));
+	for (int i = 1;i<=9; i+=2) {
+		if (isIn(p, m_pts[i%10], m_pts[(i+1)%10], m_pts[(i+2)%10])) {
+			return true;
+		}
+	}
+	if (distance <= m_radius / 2.8f) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void CMyStar::doMouseUp(CPoint p)
