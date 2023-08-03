@@ -31,10 +31,12 @@ CMyGroup::CMyGroup(CMyShape* shape)
 
 }
 
-CMyGroup::CMyGroup(std::vector<CMyShape*> shapes)
+CMyGroup::CMyGroup(CList<CMyShape*>& shapes)
 {
-    for (auto p : shapes) {
-        m_group.AddTail(p);
+    POSITION pos = shapes.GetHeadPosition();
+    while (pos != NULL) {
+        CMyShape* pShape = m_group.GetNext(pos);
+        m_group.AddTail(pShape);
     }
     updateLTRB();
 }
@@ -97,6 +99,12 @@ void CMyGroup::addShape(CMyShape* p)
     }
     m_group.AddTail(p);
     updateLTRB();
+}
+
+POSITION CMyGroup::getHeadPosition()
+{
+    POSITION pos = m_group.GetHeadPosition();
+    return pos;
 }
 
 void CMyGroup::clear()

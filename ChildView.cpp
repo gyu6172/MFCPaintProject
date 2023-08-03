@@ -28,8 +28,8 @@
 CChildView::CChildView()
 {
 	m_curMode = 0;
-	m_clickPos1 = CPoint(0,0);
-	m_clickPos2 = CPoint(0,0);
+	m_clickPos1 = CPoint(0, 0);
+	m_clickPos2 = CPoint(0, 0);
 	m_isMouseDown = false;
 	m_isSelected = false;
 }
@@ -70,20 +70,20 @@ END_MESSAGE_MAP()
 
 // CChildView 메시지 처리기
 
-BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
+BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (!CWnd::PreCreateWindow(cs))
 		return FALSE;
 
 	cs.dwExStyle |= WS_EX_CLIENTEDGE;
 	cs.style &= ~WS_BORDER;
-	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
-		::LoadCursor(nullptr, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW+1), nullptr);
+	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
+		::LoadCursor(nullptr, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1), nullptr);
 
 	return TRUE;
 }
 
-void CChildView::OnPaint() 
+void CChildView::OnPaint()
 {
 	CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
 	CRect rect;
@@ -161,7 +161,7 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pShapes.AddTail(shape);
 	}
 	else if (m_curMode == SELECTMODE) {	//선택모드
-		
+
 		m_clickPos1 = CPoint(point);
 		m_clickPos2 = CPoint(point);
 		POSITION pos = m_pShapes.GetHeadPosition();
@@ -242,7 +242,8 @@ void CChildView::OnMouseMove(UINT nFlags, CPoint point)
 				m_clickPos1 = m_clickPos2;
 				m_selectedShapes.move(dx, dy);
 				Invalidate();
-;			}
+				;
+			}
 		}
 	}
 
@@ -289,12 +290,83 @@ void CChildView::OnSelect()
 void CChildView::OnGroup()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+	POSITION firstPos = selectedPos;
+
+	CMyShape* group = new CMyGroup(m_selectedShapes.m_group);
+
+	while (selectedPos != NULL) {
+
+		POSITION prevSelected = selectedPos;
+		CMyShape* selected = m_selectedShapes.m_group.GetNext(selectedPos);
+		POSITION pShapePos = m_pShapes.GetHeadPosition();
+
+		while (pShapePos != NULL) {
+
+			POSITION pShapeprev = pShapePos;
+
+			CMyShape* pShape = m_pShapes.GetNext(pShapePos);
+
+			if (pShape == selected) {
+				m_pShapes.RemoveAt(pShapeprev);
+				m_selectedShapes.m_group.RemoveAt(prevSelected);
+			}
+		}
+	}
+
+	m_pShapes.AddTail(group);
+	m_selectedShapes.m_group.AddHead(group);
+
+	Invalidate();
 }
 
-
+#include <typeinfo>
 void CChildView::OnUngroup()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+
+	while (selectedPos != NULL) {
+
+
+		POSITION prevSelected = selectedPos;
+		CMyShape* selectedShape = m_selectedShapes.m_group.GetNext(selectedPos);
+
+
+		POSITION groupPos = selectedShape->getHeadPosition();
+
+		if(groupPos==NULL) continue;
+
+		while (groupPos != NULL) {
+
+			POSITION pShapePos = m_pShapes.GetHeadPosition();
+
+			while (pShapePos != NULL) {
+
+				POSITION pShapeprev = pShapePos;
+
+				CMyShape* pShape = m_pShapes.GetNext(pShapePos);
+
+				if (pShape == selectedShape) {
+					m_pShapes.RemoveAt(pShapeprev);
+				}
+			}
+
+
+			POSITION prevGroupPos = groupPos;
+			CMyShape* shape = selectedShape->m_group.GetNext(groupPos);
+
+			m_pShapes.AddTail(shape);
+			m_selectedShapes.m_group.AddHead(shape);
+		}
+
+		m_selectedShapes.m_group.RemoveAt(prevSelected);
+
+	}
+
+	Invalidate();
 }
 
 
@@ -303,7 +375,7 @@ void CChildView::OnUpdateRectangle(CCmdUI* pCmdUI)
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 	if (m_curMode == RECTANGLEMODE) pCmdUI->SetCheck(true);
 	else pCmdUI->SetCheck(false);
-	
+
 }
 
 
@@ -334,7 +406,7 @@ void CChildView::OnUpdateCircle(CCmdUI* pCmdUI)
 void CChildView::OnUpdateGroup(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(m_selectedShapes.m_group.GetSize()>1) pCmdUI->Enable(true);
+	if (m_selectedShapes.m_group.GetSize() > 1) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -379,7 +451,7 @@ void CChildView::OnBringfront()
 void CChildView::OnUpdateBringback(CCmdUI* pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(m_selectedShapes.m_group.GetSize() > 0) pCmdUI->Enable(true);
+	if (m_selectedShapes.m_group.GetSize() > 0) pCmdUI->Enable(true);
 	else pCmdUI->Enable(false);
 }
 
@@ -398,7 +470,7 @@ void CChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 	CMenu menu;
 	menu.LoadMenuW(IDR_MAINFRAME);
 
-	CMenu *pMenu = menu.GetSubMenu(4);
+	CMenu* pMenu = menu.GetSubMenu(4);
 	pMenu->TrackPopupMenu(
 		TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 		point.x, point.y, AfxGetMainWnd());
@@ -449,7 +521,7 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			POSITION pShapePos = m_pShapes.GetHeadPosition();
 
 			while (pShapePos != NULL) {
-				
+
 				POSITION pShapeprev = pShapePos;
 
 				CMyShape* pShape = m_pShapes.GetNext(pShapePos);

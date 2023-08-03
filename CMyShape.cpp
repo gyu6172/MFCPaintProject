@@ -9,6 +9,11 @@ CMyShape::CMyShape()
 	m_borderColor = RGB(rand()%256, rand() % 256, rand() % 256);
 }
 
+POSITION CMyShape::getHeadPosition()
+{
+	return NULL;
+}
+
 void CMyShape::setBorder(CDC &dc)
 {
 	CPen pen(PS_DOT, 1, RGB(255,0,0));

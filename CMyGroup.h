@@ -13,7 +13,7 @@ public:
 
 	CMyGroup();
 	CMyGroup(CMyShape* shape);
-	CMyGroup(std::vector<CMyShape*> shapes);
+	CMyGroup(CList<CMyShape*>& shapes);
 	bool isClicked(CPoint p);
 	void setBorder(CDC& dc);
 	void draw(CDC& dc);
@@ -21,6 +21,7 @@ public:
 	void doMouseUp(CPoint p);
 	void doMouseDown(CPoint p);
 	void addShape(CMyShape* p);
+	POSITION getHeadPosition();
 	void clear();
 };
 
