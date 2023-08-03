@@ -12,9 +12,7 @@ public:
     int m_top;
     int m_bottom;
 
-
     CMyRectangle();
-
     void draw(CDC& dc);
     bool isClicked(CPoint p);
     void doMouseUp(CPoint p);

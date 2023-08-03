@@ -349,6 +349,28 @@ void CChildView::OnUpdateUngroup(CCmdUI* pCmdUI)
 void CChildView::OnBringfront()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+
+	while (selectedPos != NULL) {
+
+		POSITION prevSelected = selectedPos;
+		CMyShape* selected = m_selectedShapes.m_group.GetNext(selectedPos);
+		POSITION pShapePos = m_pShapes.GetHeadPosition();
+
+		while (pShapePos != NULL) {
+
+			POSITION pShapeprev = pShapePos;
+
+			CMyShape* pShape = m_pShapes.GetNext(pShapePos);
+
+			if (pShape == selected) {
+				CMyShape* shape = m_pShapes.GetAt(pShapeprev);
+				m_pShapes.RemoveAt(pShapeprev);
+				m_pShapes.AddTail(shape);
+			}
+		}
+	}
+	Invalidate();
 
 
 }
@@ -387,6 +409,28 @@ void CChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 void CChildView::OnBringback()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	POSITION selectedPos = m_selectedShapes.m_group.GetHeadPosition();
+
+	while (selectedPos != NULL) {
+
+		POSITION prevSelected = selectedPos;
+		CMyShape* selected = m_selectedShapes.m_group.GetNext(selectedPos);
+		POSITION pShapePos = m_pShapes.GetHeadPosition();
+
+		while (pShapePos != NULL) {
+
+			POSITION pShapeprev = pShapePos;
+
+			CMyShape* pShape = m_pShapes.GetNext(pShapePos);
+
+			if (pShape == selected) {
+				CMyShape* shape = m_pShapes.GetAt(pShapeprev);
+				m_pShapes.RemoveAt(pShapeprev);
+				m_pShapes.AddHead(shape);
+			}
+		}
+	}
+	Invalidate();
 
 }
 
